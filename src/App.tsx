@@ -206,17 +206,6 @@ export default function App() {
   const [selectedChapter, setSelectedChapter] = useState("");
   const [selectedSubtopic, setSelectedSubtopic] = useState("");
 
-  // Reset chapter when subject changes
-  useEffect(() => {
-    setSelectedChapter("");
-    setSelectedSubtopic("");
-  }, [selectedSubject, selectedClass]);
-
-  // Reset subtopic when chapter changes
-  useEffect(() => {
-    setSelectedSubtopic("");
-  }, [selectedChapter]);
-
   const [selectedQuestionTypes, setSelectedQuestionTypes] = useState<QuestionType[]>([
     QuestionType.MCQ, 
     QuestionType.FILL_IN_BLANKS, 
@@ -230,9 +219,59 @@ export default function App() {
   const [showAnswerKey, setShowAnswerKey] = useState(false);
   
   const [questionPool, setQuestionPool] = useState<Question[]>([]);
+  const [localBank, setLocalBank] = useState<Question[]>([]);
   const [selectedQuestionIds, setSelectedQuestionIds] = useState<Set<string>>(new Set());
   const [generatedQuestions, setGeneratedQuestions] = useState<Question[]>([]);
-  
+
+  // Reset chapter when subject changes
+  useEffect(() => {
+    setSelectedChapter("");
+    setSelectedSubtopic("");
+    setSelectedQuestionIds(new Set());
+  }, [selectedSubject, selectedClass]);
+
+  // Reset subtopic when chapter changes
+  useEffect(() => {
+    setSelectedSubtopic("");
+    setSelectedQuestionIds(new Set());
+  }, [selectedChapter]);
+
+  // Clear selections when subtopic changes
+  useEffect(() => {
+    setSelectedQuestionIds(new Set());
+  }, [selectedSubtopic]);
+
+  // Clear selections when question types change
+  useEffect(() => {
+    setSelectedQuestionIds(new Set());
+  }, [selectedQuestionTypes]);
+
+  // Reset criteria when stream changes
+  useEffect(() => {
+    setSelectedSubject(SUBJECTS[0]);
+    setSelectedQuestionIds(new Set());
+  }, [selectedStream]);
+
+  // Clear selections when generation mode changes
+  useEffect(() => {
+    setSelectedQuestionIds(new Set());
+  }, [generationMode]);
+
+  // Load local bank from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('pu_intelliq_local_bank');
+    if (saved) {
+      try {
+        setLocalBank(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse local bank", e);
+      }
+    }
+  }, []);
+
+  // Combined bank for filtering
+  const fullBank = useMemo(() => [...QUESTION_BANK, ...localBank], [localBank]);
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [isAiProcessing, setIsAiProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -261,7 +300,7 @@ export default function App() {
   }, [viewMode, questionPool, generatedQuestions]);
 
   const fetchPoolFromBank = () => {
-    const filtered = QUESTION_BANK.filter(q => 
+    const filtered = fullBank.filter(q => 
       q.class === selectedClass && 
       q.subject === selectedSubject &&
       (selectedChapter === "" || q.chapter === selectedChapter) &&
@@ -296,7 +335,7 @@ export default function App() {
     }
   }, [isAiProcessing]);
 
-  const fetchPoolFromAI = async () => {
+  const fetchPoolFromAI = async (isLoadMore = false) => {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       setError("Gemini API Key is missing. Please set GEMINI_API_KEY in your environment variables.");
@@ -305,7 +344,7 @@ export default function App() {
 
     setIsAiProcessing(true);
     setGenerationProgress(0);
-    setGenerationStatus("Initializing AI Model...");
+    setGenerationStatus(isLoadMore ? "Fetching More Questions..." : "Initializing AI Model...");
     const ai = new GoogleGenAI({ apiKey });
     const model = "gemini-3-flash-preview";
 
@@ -317,7 +356,7 @@ export default function App() {
     
     The output must be a JSON array of objects matching this schema:
     {
-      "id": "string",
+      "id": "string (unique uuid)",
       "text": "string",
       "marks": number,
       "part": "Part A" | "Part B" | "Part C" | "Part D",
@@ -351,10 +390,13 @@ export default function App() {
     CRITICAL: This applies to the "text" field, "options" array, and "answer" field.
     CRITICAL: If ANY field (text, options, or answer) contains LaTeX or mathematical symbols, the "isMath" property MUST be set to true.
     CRITICAL: Do NOT use plain text for math (e.g., use \\( V \\) instead of just V).
-    CRITICAL: For MCQ options, if they contain math, use LaTeX delimiters like \\( ... \\) inside the option strings.`;
+    CRITICAL: For MCQ options, if they contain math, use LaTeX delimiters like \\( ... \\) inside the option strings.
+    
+    ${isLoadMore ? "IMPORTANT: Generate DIFFERENT questions from the ones already provided. Focus on deeper concepts." : ""}
+    `;
 
     try {
-      setGenerationStatus("Analyzing Karnataka PU Board Blueprint...");
+      setGenerationStatus(isLoadMore ? "Searching for New Concepts..." : "Analyzing Karnataka PU Board Blueprint...");
       const result = await ai.models.generateContentStream({
         model,
         contents: [{ parts: [{ text: prompt }] }],
@@ -411,6 +453,17 @@ export default function App() {
       }
 
       const data = JSON.parse(fullText);
+      
+      // Auto-save to local bank
+      setLocalBank(prev => {
+        const existingTexts = new Set(prev.map(q => q.text));
+        const uniqueAi = data.filter((q: Question) => !existingTexts.has(q.text));
+        if (uniqueAi.length === 0) return prev;
+        const updated = [...prev, ...uniqueAi];
+        localStorage.setItem('pu_intelliq_local_bank', JSON.stringify(updated));
+        return updated;
+      });
+
       setQuestionPool(prev => {
         const existingTexts = new Set(prev.map(q => q.text));
         const uniqueAi = data.filter((q: Question) => !existingTexts.has(q.text));
@@ -430,7 +483,6 @@ export default function App() {
   const startGeneration = async () => {
     setIsGenerating(true);
     setError(null);
-    setSelectedQuestionIds(new Set());
     
     // 1. Load Bank Questions Immediately
     const bankQuestions = fetchPoolFromBank();
@@ -1057,6 +1109,25 @@ export default function App() {
                       );
                     })}
                   </div>
+
+                  {generationMode === 'ai' && (
+                    <div className="flex justify-center pt-4">
+                      <button
+                        onClick={() => fetchPoolFromAI(true)}
+                        disabled={isAiProcessing}
+                        className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-indigo-100 text-indigo-600 rounded-2xl font-bold hover:bg-indigo-50 hover:border-indigo-200 transition-all shadow-sm group"
+                      >
+                        {isAiProcessing ? (
+                          <RefreshCw className="w-5 h-5 animate-spin" />
+                        ) : (
+                          <>
+                            <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform" />
+                            <span>Load More AI Questions</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  )}
                 </motion.div>
               ) : viewMode === 'preview' ? (
                 <motion.div
