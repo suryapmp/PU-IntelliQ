@@ -1,20 +1,31 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# PU IntelliQ - Deployment Guide
 
-# Run and deploy your AI Studio app
+## Deploying to Netlify
 
-This contains everything you need to run your app locally.
+This application is ready to be deployed as a static Single Page Application (SPA) on Netlify.
 
-View your app in AI Studio: https://ai.studio/apps/84a145d0-3087-4758-b663-80444f692965
+### Prerequisites
 
-## Run Locally
+- A [Netlify](https://www.netlify.com/) account.
+- A [Gemini API Key](https://aistudio.google.com/app/apikey).
 
-**Prerequisites:**  Node.js
+### Deployment Steps
 
+1. **Push your code to a Git repository** (GitHub, GitLab, or Bitbucket).
+2. **Connect your repository to Netlify**:
+   - Go to your Netlify dashboard and click **"Add new site"** > **"Import an existing project"**.
+   - Select your Git provider and the repository.
+3. **Configure Build Settings**:
+   - **Build command**: `npm run build`
+   - **Publish directory**: `dist`
+4. **Set Environment Variables**:
+   - In the Netlify dashboard, go to **Site settings** > **Environment variables**.
+   - Add a new variable:
+     - **Key**: `GEMINI_API_KEY`
+     - **Value**: Your actual Gemini API key.
+5. **Deploy**:
+   - Click **"Deploy site"**. Netlify will build and host your application.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Important Note on Full-Stack Features
+
+The current application uses an Express server (`server.ts`) for local development and health checks. When deployed to Netlify as a static site, this server will **not** run. However, since the AI generation logic is implemented in the frontend, the core functionality will work perfectly as a static site.

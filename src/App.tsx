@@ -173,10 +173,16 @@ export default function App() {
   }, [isAiProcessing]);
 
   const fetchPoolFromAI = async () => {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      setError("Gemini API Key is missing. Please set GEMINI_API_KEY in your environment variables.");
+      return;
+    }
+
     setIsAiProcessing(true);
     setGenerationProgress(0);
     setGenerationStatus("Initializing AI Model...");
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+    const ai = new GoogleGenAI({ apiKey });
     const model = "gemini-3-flash-preview";
 
     const prompt = `Generate a large pool of questions for a Karnataka PU Board ${selectedClass} ${selectedSubject} exam.
