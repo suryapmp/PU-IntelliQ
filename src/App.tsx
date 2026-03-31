@@ -33,48 +33,164 @@ const SUBJECTS = ["Physics", "Chemistry", "Mathematics", "Biology", "Accountancy
 const STREAMS = ["Science", "Commerce", "Arts"];
 const CLASSES = ["I PU", "II PU"];
 
-const CHAPTER_MAPPING: Record<string, string[]> = {
-  "Physics": [
-    "Electric Charges and Fields", "Electrostatic Potential and Capacitance", 
-    "Current Electricity", "Moving Charges and Magnetism", "Magnetism and Matter",
-    "Electromagnetic Induction", "Alternating Current", "Electromagnetic Waves",
-    "Ray Optics and Optical Instruments", "Wave Optics", "Dual Nature of Radiation and Matter",
-    "Atoms", "Nuclei", "Semiconductor Electronics"
-  ],
-  "Chemistry": [
-    "Solutions", "Electrochemistry", "Chemical Kinetics", "d and f Block Elements",
-    "Coordination Compounds", "Haloalkanes and Haloarenes", "Alcohols, Phenols and Ethers",
-    "Aldehydes, Ketones and Carboxylic Acids", "Amines", "Biomolecules"
-  ],
-  "Mathematics": [
-    "Relations and Functions", "Inverse Trigonometric Functions", "Matrices",
-    "Determinants", "Continuity and Differentiability", "Application of Derivatives",
-    "Integrals", "Application of Integrals", "Differential Equations",
-    "Vector Algebra", "Three Dimensional Geometry", "Linear Programming", "Probability"
-  ],
-  "Biology": [
-    "Sexual Reproduction in Flowering Plants", "Human Reproduction", "Reproductive Health",
-    "Principles of Inheritance and Variation", "Molecular Basis of Inheritance", "Evolution",
-    "Human Health and Disease", "Microbes in Human Welfare", "Biotechnology: Principles and Processes",
-    "Biotechnology and its Applications", "Organisms and Populations", "Ecosystem", "Biodiversity and Conservation"
-  ],
-  "Accountancy": [
-    "Accounting for Partnership: Basic Concepts", "Reconstitution of a Partnership Firm: Admission of a Partner",
-    "Retirement/Death of a Partner", "Dissolution of Partnership Firm", "Accounting for Share Capital",
-    "Issue and Redemption of Debentures", "Financial Statements of a Company", "Analysis of Financial Statements",
-    "Accounting Ratios", "Cash Flow Statement"
-  ],
-  "Business Studies": [
-    "Nature and Significance of Management", "Principles of Management", "Business Environment",
-    "Planning", "Organizing", "Staffing", "Directing", "Controlling", "Financial Management",
-    "Financial Markets", "Marketing", "Consumer Protection"
-  ],
-  "Economics": [
-    "Introduction to Microeconomics", "Theory of Consumer Behaviour", "Production and Costs",
-    "Theory of the Firm under Perfect Competition", "Market Equilibrium", "Non-competitive Markets",
-    "Introduction to Macroeconomics", "National Income Accounting", "Money and Banking",
-    "Determination of Income and Employment", "Government Budget and the Economy", "Open Economy Macroeconomics"
-  ]
+interface Chapter {
+  name: string;
+  subtopics: string[];
+}
+
+const CHAPTER_MAPPING: Record<string, Record<string, Chapter[]>> = {
+  "I PU": {
+    "Physics": [
+      { name: "Units and Measurements", subtopics: ["The International System of Units", "Significant Figures", "Dimensions of Physical Quantities", "Dimensional Analysis"] },
+      { name: "Motion in a Straight Line", subtopics: ["Position, Path Length and Displacement", "Average Velocity and Average Speed", "Instantaneous Velocity and Speed", "Acceleration", "Kinematic Equations"] },
+      { name: "Motion in a Plane", subtopics: ["Scalars and Vectors", "Resolution of Vectors", "Vector Addition", "Motion in a Plane with Constant Acceleration", "Relative Velocity in Two Dimensions", "Projectile Motion", "Uniform Circular Motion"] },
+      { name: "Laws of Motion", subtopics: ["Aristotle's Fallacy", "The Law of Inertia", "Newton's First Law of Motion", "Newton's Second Law of Motion", "Newton's Third Law of Motion", "Conservation of Momentum", "Equilibrium of a Particle", "Common Forces in Mechanics", "Circular Motion", "Solving Problems in Mechanics"] },
+      { name: "Work, Energy and Power", subtopics: ["The Scalar Product", "Notions of Work and Kinetic Energy", "Work", "Kinetic Energy", "Work Done by a Variable Force", "The Work-Energy Theorem for a Variable Force", "The Concept of Potential Energy", "The Conservation of Mechanical Energy", "The Potential Energy of a Spring", "Various Forms of Energy: the Law of Conservation of Energy", "Power", "Collisions"] },
+      { name: "System of Particles and Rotational Motion", subtopics: ["Centre of Mass", "Motion of Centre of Mass", "Linear Momentum of a System of Particles", "Vector Product of Two Vectors", "Angular Velocity and its Relation with Linear Velocity", "Torque and Angular Momentum", "Equilibrium of a Rigid Body", "Moment of Inertia", "Theorems of Perpendicular and Parallel Axes", "Kinematics of Rotational Motion about a Fixed Axis", "Dynamics of Rotational Motion about a Fixed Axis", "Angular Momentum in Case of Rotation about a Fixed Axis", "Rolling Motion"] },
+      { name: "Gravitation", subtopics: ["Kepler's Laws", "Universal Law of Gravitation", "The Gravitational Constant", "Acceleration due to Gravity of the Earth", "Acceleration due to Gravity Below and Above the Surface of Earth", "Gravitational Potential Energy", "Escape Speed", "Earth Satellites", "Energy of an Orbiting Satellite", "Geostationary and Polar Satellites", "Weightlessness"] },
+      { name: "Mechanical Properties of Solids", subtopics: ["Elastic Behaviour of Solids", "Stress and Strain", "Hooke's Law", "Stress-strain Curve", "Elastic Moduli", "Applications of Elastic Behaviour of Materials"] },
+      { name: "Mechanical Properties of Fluids", subtopics: ["Pressure", "Streamline Flow", "Bernoulli's Principle", "Viscosity", "Reynolds Number", "Surface Tension"] },
+      { name: "Thermal Properties of Matter", subtopics: ["Temperature and Heat", "Measurement of Temperature", "Ideal-gas Equation and Absolute Temperature", "Thermal Expansion", "Specific Heat Capacity", "Calorimetry", "Change of State", "Heat Transfer", "Newton's Law of Cooling"] },
+      { name: "Thermodynamics", subtopics: ["Thermal Equilibrium", "Zeroth Law of Thermodynamics", "Heat, Internal Energy and Work", "First Law of Thermodynamics", "Specific Heat Capacity", "Thermodynamic State Variables and Equation of State", "Thermodynamic Processes", "Heat Engines", "Refrigerators and Heat Pumps", "Second Law of Thermodynamics", "Reversible and Irreversible Processes", "Carnot Engine"] },
+      { name: "Kinetic Theory", subtopics: ["Molecular Nature of Matter", "Behaviour of Gases", "Kinetic Theory of an Ideal Gas", "Law of Equipartition of Energy", "Specific Heat Capacity", "Mean Free Path"] },
+      { name: "Oscillations", subtopics: ["Periodic and Oscillatory Motions", "Simple Harmonic Motion", "Simple Harmonic Motion and Uniform Circular Motion", "Velocity and Acceleration in Simple Harmonic Motion", "Force Law for Simple Harmonic Motion", "Energy in Simple Harmonic Motion", "Some Systems Executing Simple Harmonic Motion", "Damped Simple Harmonic Motion", "Forced Oscillations and Resonance"] },
+      { name: "Waves", subtopics: ["Transverse and Longitudinal Waves", "Displacement Relation in a Progressive Wave", "The Speed of a Travelling Wave", "The Principle of Superposition of Waves", "Reflection of Waves", "Beats", "Doppler Effect"] }
+    ],
+    "Chemistry": [
+      { name: "Some Basic Concepts of Chemistry", subtopics: ["Importance of Chemistry", "Nature of Matter", "Properties of Matter and their Measurement", "Uncertainty in Measurement", "Laws of Chemical Combinations", "Dalton's Atomic Theory", "Atomic and Molecular Masses", "Mole Concept and Molar Masses", "Percentage Composition", "Stoichiometry and Stoichiometric Calculations"] },
+      { name: "Structure of Atom", subtopics: ["Discovery of Sub-atomic Particles", "Atomic Models", "Developments Leading to the Bohr’s Model of Atom", "Bohr’s Model for Hydrogen Atom", "Towards Quantum Mechanical Model of the Atom", "Quantum Mechanical Model of Atom"] },
+      { name: "Classification of Elements and Periodicity in Properties", subtopics: ["Genesis of Periodic Classification", "Modern Periodic Law and the present form of the Periodic Table", "Nomenclature of Elements with Atomic Numbers > 100", "Electronic Configurations of Elements and the Periodic Table", "Electronic Configurations and Types of Elements: s-, p-, d-, f- Blocks", "Periodic Trends in Properties of Elements"] },
+      { name: "Chemical Bonding and Molecular Structure", subtopics: ["Kossel-Lewis Approach to Chemical Bonding", "Ionic or Electrovalent Bond", "Bond Parameters", "The Valence Shell Electron Pair Repulsion (VSEPR) Theory", "Valence Bond Theory", "Hybridisation", "Molecular Orbital Theory", "Hydrogen Bonding"] },
+      { name: "States of Matter", subtopics: ["Intermolecular Forces", "Thermal Energy", "Intermolecular Forces vs Thermal Interactions", "The Gaseous State", "The Gas Laws", "Ideal Gas Equation", "Kinetic Molecular Theory of Gases", "Liquefaction of Gases", "Liquid State"] },
+      { name: "Thermodynamics", subtopics: ["Thermodynamic Terms", "Applications", "Measurement of ΔU and ΔH: Calorimetry", "Enthalpy Change, ΔrH of a Reaction – Reaction Enthalpy", "Enthalpies for Different Types of Reactions", "Spontaneity", "Gibbs Energy Change and Equilibrium"] },
+      { name: "Equilibrium", subtopics: ["Equilibrium in Physical Processes", "Equilibrium in Chemical Processes – Dynamic Equilibrium", "Law of Chemical Equilibrium and Equilibrium Constant", "Homogeneous Equilibria", "Heterogeneous Equilibria", "Applications of Equilibrium Constant", "Relationship between Equilibrium Constant K, Reaction Quotient Q and Gibbs Energy G", "Factors Affecting Equilibria", "Ionic Equilibrium in Solution", "Acids, Bases and Salts", "Ionization of Acids and Bases", "Buffer Solutions", "Solubility Equilibria of Sparingly Soluble Salts"] },
+      { name: "Redox Reactions", subtopics: ["Classical Idea of Redox Reactions – Oxidation and Reduction Reactions", "Redox Reactions in Terms of Electron Transfer Reactions", "Oxidation Number", "Redox Reactions and Electrode Processes"] },
+      { name: "Hydrogen", subtopics: ["Position of Hydrogen in the Periodic Table", "Dihydrogen, H2", "Preparation of Dihydrogen, H2", "Properties of Dihydrogen", "Hydrides", "Water", "Hydrogen Peroxide (H2O2)", "Heavy Water, D2O", "Dihydrogen as a Fuel"] },
+      { name: "The s-Block Elements", subtopics: ["Group 1 Elements: Alkali Metals", "General Characteristics of the Compounds of the Alkali Metals", "Anomalous Properties of Lithium", "Some Important Compounds of Sodium", "Biological Importance of Sodium and Potassium", "Group 2 Elements: Alkaline Earth Metals", "General Characteristics of Compounds of the Alkaline Earth Metals", "Anomalous Behaviour of Beryllium", "Some Important Compounds of Calcium", "Biological Importance of Magnesium and Calcium"] },
+      { name: "The p-Block Elements", subtopics: ["Group 13 Elements: The Boron Family", "Important Trends and Anomalous Properties of Boron", "Some Important Compounds of Boron", "Uses of Boron and Aluminium and their Compounds", "Group 14 Elements: The Carbon Family", "Important Trends and Anomalous Properties of Carbon", "Allotropes of Carbon", "Some Important Compounds of Carbon and Silicon"] },
+      { name: "Organic Chemistry – Some Basic Principles and Techniques", subtopics: ["General Introduction", "Tetravalence of Carbon: Shapes of Organic Compounds", "Structural Representations of Organic Compounds", "Classification of Organic Compounds", "Nomenclature of Organic Compounds", "Isomerism", "Fundamental Concepts in Organic Reaction Mechanism", "Methods of Purification of Organic Compounds", "Qualitative Analysis of Organic Compounds", "Quantitative Analysis"] },
+      { name: "Hydrocarbons", subtopics: ["Classification", "Alkanes", "Alkenes", "Alkynes", "Aromatic Hydrocarbon"] },
+      { name: "Environmental Chemistry", subtopics: ["Environmental Pollution", "Atmospheric Pollution", "Water Pollution", "Soil Pollution", "Industrial Waste", "Strategies to control Environmental Pollution", "Green Chemistry"] }
+    ],
+    "Mathematics": [
+      { name: "Sets", subtopics: ["Sets and their Representations", "The Empty Set", "Finite and Infinite Sets", "Equal Sets", "Subsets", "Power Set", "Universal Set", "Venn Diagrams", "Operations on Sets", "Complement of a Set", "Practical Problems on Union and Intersection of Two Sets"] },
+      { name: "Relations and Functions", subtopics: ["Cartesian Product of Sets", "Relations", "Functions"] },
+      { name: "Trigonometric Functions", subtopics: ["Angles", "Trigonometric Functions", "Trigonometric Functions of Sum and Difference of Two Angles", "Trigonometric Equations"] },
+      { name: "Principle of Mathematical Induction", subtopics: ["Motivation", "The Principle of Mathematical Induction"] },
+      { name: "Complex Numbers and Quadratic Equations", subtopics: ["Complex Numbers", "Algebra of Complex Numbers", "The Modulus and the Conjugate of a Complex Number", "Argand Plane and Polar Representation", "Quadratic Equations"] },
+      { name: "Linear Inequalities", subtopics: ["Inequalities", "Algebraic Solutions of Linear Inequalities in One Variable and their Graphical Representation", "Graphical Solution of Linear Inequalities in Two Variables", "Solution of System of Linear Inequalities in Two Variables"] },
+      { name: "Permutations and Combinations", subtopics: ["Fundamental Principle of Counting", "Permutations", "Combinations"] },
+      { name: "Binomial Theorem", subtopics: ["Binomial Theorem for Positive Integral Indices", "General and Middle Terms"] },
+      { name: "Sequence and Series", subtopics: ["Sequences", "Series", "Arithmetic Progression (A.P.)", "Geometric Progression (G.P.)", "Relationship Between A.M. and G.M.", "Sum to n Terms of Special Series"] },
+      { name: "Straight Lines", subtopics: ["Slope of a Line", "Various Forms of the Equation of a Line", "Distance of a Point From a Line"] },
+      { name: "Conic Sections", subtopics: ["Sections of a Cone", "Circle", "Parabola", "Ellipse", "Hyperbola"] },
+      { name: "Introduction to Three Dimensional Geometry", subtopics: ["Coordinate Axes and Coordinate Planes in Three Dimensional Space", "Coordinates of a Point in Space", "Distance between Two Points", "Section Formula"] },
+      { name: "Limits and Derivatives", subtopics: ["Intuitive Idea of Derivatives", "Limits", "Limits of Trigonometric Functions", "Derivatives"] },
+      { name: "Mathematical Reasoning", subtopics: ["Statements", "New Statements from Old", "Special Words/Phrases", "Implications", "Validating Statements"] },
+      { name: "Statistics", subtopics: ["Measures of Dispersion", "Range", "Mean Deviation", "Variance and Standard Deviation", "Analysis of Frequency Distributions"] },
+      { name: "Probability", subtopics: ["Random Experiments", "Event", "Axiomatic Approach to Probability"] }
+    ],
+    "Biology": [
+      { name: "The Living World", subtopics: ["What is ‘Living’?", "Diversity in the Living World", "Taxonomic Categories", "Taxonomical Aids"] },
+      { name: "Biological Classification", subtopics: ["Kingdom Monera", "Kingdom Protista", "Kingdom Fungi", "Kingdom Plantae", "Kingdom Animalia", "Viruses, Viroids and Lichens"] },
+      { name: "Plant Kingdom", subtopics: ["Algae", "Bryophytes", "Pteridophytes", "Gymnosperms", "Angiosperms", "Plant Life Cycles and Alternation of Generations"] },
+      { name: "Animal Kingdom", subtopics: ["Basis of Classification", "Classification of Animals"] },
+      { name: "Morphology of Flowering Plants", subtopics: ["The Root", "The Stem", "The Leaf", "The Inflorescence", "The Flower", "The Fruit", "The Seed", "Semi-technical Description of a Typical Flowering Plant", "Description of Some Important Families"] },
+      { name: "Anatomy of Flowering Plants", subtopics: ["The Tissues", "The Tissue System", "Anatomy of Dicotyledonous and Monocotyledonous Plants", "Secondary Growth"] },
+      { name: "Structural Organisation in Animals", subtopics: ["Animal Tissues", "Organ and Organ System", "Earthworm", "Cockroach", "Frogs"] },
+      { name: "Cell: The Unit of Life", subtopics: ["What is a Cell?", "Cell Theory", "An Overview of Cell", "Prokaryotic Cells", "Eukaryotic Cells"] },
+      { name: "Biomolecules", subtopics: ["How to Analyse Chemical Composition?", "Primary and Secondary Metabolites", "Biomacromolecules", "Proteins", "Polysaccharides", "Nucleic Acids", "Structure of Proteins", "Nature of Bond Linking Monomers in a Polymer", "Dynamic State of Body Constituents – Concept of Metabolism", "Metabolic Basis for Living", "The Living State", "Enzymes"] },
+      { name: "Cell Cycle and Cell Division", subtopics: ["Cell Cycle", "M Phase", "Significance of Mitosis", "Meiosis", "Significance of Meiosis"] },
+      { name: "Transport in Plants", subtopics: ["Means of Transport", "Plant-Water Relations", "Long Distance Transport of Water", "Transpiration", "Uptake and Transport of Mineral Nutrients", "Phloem Transport: Flow from Source to Sink"] },
+      { name: "Mineral Nutrition", subtopics: ["Methods to Study the Mineral Requirements of Plants", "Essential Mineral Elements", "Mechanism of Absorption of Elements", "Translocation of Solutes", "Soil as Reservoir of Essential Elements", "Metabolism of Nitrogen"] },
+      { name: "Photosynthesis in Higher Plants", subtopics: ["What do we know?", "Early Experiments", "Where does Photosynthesis take place?", "How many Pigments are involved in Photosynthesis?", "What is Light Reaction?", "The Electron Transport", "Where are the ATP and NADPH Used?", "The C4 Pathway", "Photorespiration", "Factors affecting Photosynthesis"] },
+      { name: "Respiration in Plants", subtopics: ["Do Plants Breathe?", "Glycolysis", "Fermentation", "Aerobic Respiration", "The Respiratory Balance Sheet", "Amphibolic Pathway", "Respiratory Quotient"] },
+      { name: "Plant Growth and Development", subtopics: ["Growth", "Differentiation, Dedifferentiation and Redifferentiation", "Development", "Plant Growth Regulators", "Photoperiodism", "Vernalisation"] },
+      { name: "Digestion and Absorption", subtopics: ["Digestive System", "Digestion of Food", "Absorption of Digested Products", "Disorders of Digestive System"] },
+      { name: "Breathing and Exchange of Gases", subtopics: ["Respiratory Organs", "Mechanism of Breathing", "Exchange of Gases", "Transport of Gases", "Regulation of Respiration", "Disorders of Respiratory System"] },
+      { name: "Body Fluids and Circulation", subtopics: ["Blood", "Lymph (Tissue Fluid)", "Circulatory Pathways", "Double Circulation", "Regulation of Cardiac Activity", "Disorders of Circulatory System"] },
+      { name: "Excretory Products and their Elimination", subtopics: ["Human Excretory System", "Urine Formation", "Function of the Tubules", "Mechanism of Concentration of the Filtrate", "Regulation of Kidney Function", "Micturition", "Role of other Organs in Excretion", "Disorders of the Excretory System"] },
+      { name: "Locomotion and Movement", subtopics: ["Types of Movement", "Muscle", "Skeletal System", "Joints", "Disorders of Muscular and Skeletal System"] },
+      { name: "Neural Control and Coordination", subtopics: ["Neural System", "Human Neural System", "Neuron as Structural and Functional Unit of Neural System", "Central Neural System", "Reflex Action and Reflex Arc", "Sensory Reception and Processing"] },
+      { name: "Chemical Coordination and Integration", subtopics: ["Endocrine Glands and Hormones", "Human Endocrine System", "Hormones of Heart, Kidney and Gastrointestinal Tract", "Mechanism of Hormone Action"] }
+    ]
+  },
+  "II PU": {
+    "Physics": [
+      { name: "Electric Charges and Fields", subtopics: ["Electric Charge", "Conductors and Insulators", "Charging by Induction", "Basic Properties of Electric Charge", "Coulomb’s Law", "Forces between Multiple Charges", "Electric Field", "Electric Field Lines", "Electric Flux", "Electric Dipole", "Dipole in a Uniform External Field", "Continuous Charge Distribution", "Gauss’s Law", "Applications of Gauss’s Law"] },
+      { name: "Electrostatic Potential and Capacitance", subtopics: ["Electrostatic Potential", "Potential due to a Point Charge", "Potential due to an Electric Dipole", "Potential due to a System of Charges", "Equipotential Surfaces", "Potential Energy of a System of Charges", "Potential Energy in an External Field", "Electrostatics of Conductors", "Dielectrics and Polarisation", "Capacitors and Capacitance", "The Parallel Plate Capacitor", "Effect of Dielectric on Capacitance", "Combination of Capacitors", "Energy Stored in a Capacitor"] },
+      { name: "Current Electricity", subtopics: ["Electric Current", "Electric Currents in Conductors", "Ohm’s law", "Drift of Electrons and the Origin of Resistivity", "Limitations of Ohm’s Law", "Resistivity of Various Materials", "Temperature Dependence of Resistivity", "Electrical Energy, Power", "Combination of Resistors — Series and Parallel", "Cells, emf, Internal Resistance", "Cells in Series and in Parallel", "Kirchhoff’s Rules", "Wheatstone Bridge", "Meter Bridge", "Potentiometer"] },
+      { name: "Moving Charges and Magnetism", subtopics: ["Magnetic Force", "Motion in a Magnetic Field", "Motion in Combined Electric and Magnetic Fields", "Magnetic Field due to a Current Element, Biot-Savart Law", "Magnetic Field on the Axis of a Circular Current Loop", "Ampere’s Circuital Law", "The Solenoid and the Toroid", "Force between Two Parallel Currents, the Ampere", "Torque on Current Loop, Magnetic Dipole", "The Moving Coil Galvanometer"] },
+      { name: "Magnetism and Matter", subtopics: ["The Bar Magnet", "Magnetism and Gauss’s Law", "The Earth’s Magnetism", "Magnetisation and Magnetic Intensity", "Magnetic Properties of Materials", "Permanent Magnets and Electromagnets"] },
+      { name: "Electromagnetic Induction", subtopics: ["The Experiments of Faraday and Henry", "Magnetic Flux", "Faraday’s Law of Induction", "Lenz’s Law and Conservation of Energy", "Motional Electromotive Force", "Energy Consideration: A Quantitative Study", "Eddy Currents", "Inductance", "AC Generator"] },
+      { name: "Alternating Current", subtopics: ["AC Voltage Applied to a Resistor", "Representation of AC Current and Voltage by Rotating Vectors — Phasors", "AC Voltage Applied to an Inductor", "AC Voltage Applied to a Capacitor", "AC Voltage Applied to a Series LCR Circuit", "Power in AC Circuit: The Power Factor", "LC Oscillations", "Transformers"] },
+      { name: "Electromagnetic Waves", subtopics: ["Displacement Current", "Electromagnetic Waves", "Electromagnetic Spectrum"] },
+      { name: "Ray Optics and Optical Instruments", subtopics: ["Reflection of Light by Spherical Mirrors", "Refraction", "Total Internal Reflection", "Refraction at Spherical Surfaces and by Lenses", "Refraction through a Prism", "Dispersion by a Prism", "Some Natural Phenomena due to Sunlight", "Optical Instruments"] },
+      { name: "Wave Optics", subtopics: ["Huygens Principle", "Refraction and Reflection of Plane Waves using Huygens Principle", "Coherent and Incoherent Addition of Waves", "Interference of Light Waves and Young’s Experiment", "Diffraction", "Polarisation"] },
+      { name: "Dual Nature of Radiation and Matter", subtopics: ["Electron Emission", "Photoelectric Effect", "Experimental Study of Photoelectric Effect", "Photoelectric Effect and Wave Theory of Light", "Einstein’s Photoelectric Equation: Energy Quantum of Radiation", "Particle Nature of Light: The Photon", "Wave Nature of Matter", "Davisson and Germer Experiment"] },
+      { name: "Atoms", subtopics: ["Alpha-particle Scattering and Rutherford’s Nuclear Model of Atom", "Atomic Spectra", "Bohr Model of the Hydrogen Atom", "The Line Spectra of the Hydrogen Atom", "DE Broglie’s Explanation of Bohr’s Second Postulate of Quantisation"] },
+      { name: "Nuclei", subtopics: ["Atomic Masses and Composition of Nucleus", "Size of the Nucleus", "Mass-Energy and Nuclear Binding Energy", "Nuclear Force", "Radioactivity", "Nuclear Energy"] },
+      { name: "Semiconductor Electronics: Materials, Devices and Simple Circuits", subtopics: ["Classification of Metals, Conductors and Semiconductors", "Intrinsic Semiconductor", "Extrinsic Semiconductor", "p-n Junction", "Semiconductor Diode", "Application of Junction Diode as a Rectifier", "Special Purpose p-n Junction Diodes", "Junction Transistor", "Digital Electronics and Logic Gates", "Integrated Circuits"] },
+      { name: "Communication Systems", subtopics: ["Elements of a Communication System", "Basic Terminology Used in Electronic Communication Systems", "Bandwidth of Signals", "Bandwidth of Transmission Medium", "Propagation of Electromagnetic Waves", "Modulation and its Necessity", "Amplitude Modulation", "Production of Amplitude Modulated Wave", "Detection of Amplitude Modulated Wave"] }
+    ],
+    "Chemistry": [
+      { name: "Solutions", subtopics: ["Types of Solutions", "Expressing Concentration of Solutions", "Solubility", "Vapour Pressure of Liquid Solutions", "Ideal and Non-ideal Solutions", "Colligative Properties and Determination of Molar Mass", "Abnormal Molar Masses"] },
+      { name: "Electrochemistry", subtopics: ["Electrochemical Cells", "Galvanic Cells", "Nernst Equation", "Conductance of Electrolytic Solutions", "Electrolytic Cells and Electrolysis", "Batteries", "Fuel Cells", "Corrosion"] },
+      { name: "Chemical Kinetics", subtopics: ["Rate of a Chemical Reaction", "Factors Influencing Rate of a Reaction", "Integrated Rate Equations", "Pseudo First Order Reaction", "Temperature Dependence of the Rate of a Reaction", "Collision Theory of Chemical Reactions"] },
+      { name: "The d-and f-Block Elements", subtopics: ["Position in the Periodic Table", "Electronic Configurations of the d-Block Elements", "General Properties of the Transition Elements (d-Block)", "Some Important Compounds of Transition Elements", "The Lanthanoids", "The Actinoids", "Some Applications of d- and f-Block Elements"] },
+      { name: "Coordination Compounds", subtopics: ["Werner's Theory of Coordination Compounds", "Definitions of Some Important Terms Pertaining to Coordination Compounds", "Nomenclature of Coordination Compounds", "Isomerism in Coordination Compounds", "Bonding in Coordination Compounds", "Bonding in Metal Carbonyls", "Importance and Applications of Coordination Compounds"] },
+      { name: "Haloalkanes and Haloarenes", subtopics: ["Classification", "Nomenclature", "Nature of C-X Bond", "Methods of Preparation of Haloalkanes", "Preparation of Haloarenes", "Physical Properties", "Chemical Reactions", "Polyhalogen Compounds"] },
+      { name: "Alcohols, Phenols and Ethers", subtopics: ["Classification", "Nomenclature", "Structures of Functional Groups", "Alcohols and Phenols", "Some Commercially Important Alcohols", "Ethers"] },
+      { name: "Aldehydes, Ketones and Carboxylic Acids", subtopics: ["Nomenclature and Structure of Carbonyl Group", "Preparation of Aldehydes and Ketones", "Physical Properties", "Chemical Reactions", "Uses of Aldehydes and Ketones", "Nomenclature and Structure of Carboxyl Group", "Methods of Preparation of Carboxylic Acids", "Physical Properties", "Chemical Reactions", "Uses of Carboxylic Acids"] },
+      { name: "Amines", subtopics: ["Structure of Amines", "Classification", "Nomenclature", "Preparation of Amines", "Physical Properties", "Chemical Reactions", "Method of Preparation of Diazonium Salts", "Physical Properties", "Chemical Reactions", "Importance of Diazonium Salts in Synthesis of Aromatic Compounds"] },
+      { name: "Biomolecules", subtopics: ["Carbohydrates", "Proteins", "Enzymes", "Vitamins", "Nucleic Acids", "Hormones"] }
+    ],
+    "Mathematics": [
+      { name: "Relations and Functions", subtopics: ["Types of Relations", "Types of Functions", "Composition of Functions and Invertible Function", "Binary Operations"] },
+      { name: "Inverse Trigonometric Functions", subtopics: ["Basic Concepts", "Properties of Inverse Trigonometric Functions"] },
+      { name: "Matrices", subtopics: ["Matrix", "Types of Matrices", "Operations on Matrices", "Transpose of a Matrix", "Symmetric and Skew Symmetric Matrices", "Elementary Operation (Transformation) of a Matrix", "Invertible Matrices"] },
+      { name: "Determinants", subtopics: ["Determinant", "Properties of Determinants", "Area of a Triangle", "Minors and Cofactors", "Adjoint and Inverse of a Matrix", "Applications of Determinants and Matrices"] },
+      { name: "Continuity and Differentiability", subtopics: ["Continuity", "Differentiability", "Exponential and Logarithmic Functions", "Logarithmic Differentiation", "Derivatives of Functions in Parametric Forms", "Second Order Derivative", "Mean Value Theorem"] },
+      { name: "Application of Derivatives", subtopics: ["Rate of Change of Quantities", "Increasing and Decreasing Functions", "Tangents and Normals", "Approximations", "Maxima and Minima"] },
+      { name: "Integrals", subtopics: ["Integration as an Inverse Process of Differentiation", "Methods of Integration", "Integrals of some Particular Functions", "Integration by Partial Fractions", "Integration by Parts", "Definite Integral", "Fundamental Theorem of Calculus", "Evaluation of Definite Integrals by Substitution", "Some Properties of Definite Integrals"] },
+      { name: "Application of Integrals", subtopics: ["Area under Simple Curves", "Area between Two Curves"] },
+      { name: "Differential Equations", subtopics: ["Basic Concepts", "General and Particular Solutions of a Differential Equation", "Formation of a Differential Equation whose General Solution is given", "Methods of Solving First Order, First Degree Differential Equations"] },
+      { name: "Vector Algebra", subtopics: ["Some Basic Concepts", "Types of Vectors", "Addition of Vectors", "Multiplication of a Vector by a Scalar", "Product of Two Vectors"] },
+      { name: "Three Dimensional Geometry", subtopics: ["Direction Cosines and Direction Ratios of a Line", "Equation of a Line in Space", "Angle between Two Lines", "Shortest Distance between Two Lines", "Plane", "Coplanarity of Two Lines", "Angle between Two Planes", "Distance of a Point from a Plane", "Angle between a Line and a Plane"] },
+      { name: "Linear Programming", subtopics: ["Linear Programming Problem and its Mathematical Formulation", "Graphical Method of Solving Linear Programming Problems"] },
+      { name: "Probability", subtopics: ["Conditional Probability", "Multiplication Theorem on Probability", "Independent Events", "Bayes' Theorem", "Random Variables and its Probability Distributions", "Bernoulli Trials and Binomial Distribution"] }
+    ],
+    "Biology": [
+      { name: "Reproduction in Organisms", subtopics: ["Asexual Reproduction", "Sexual Reproduction"] },
+      { name: "Sexual Reproduction in Flowering Plants", subtopics: ["Flower—A Fascinating Organ of Angiosperms", "Pre-fertilisation: Structures and Events", "Double Fertilisation", "Post-fertilisation: Structures and Events", "Apomixis and Polyembryony"] },
+      { name: "Human Reproduction", subtopics: ["The Male Reproductive System", "The Female Reproductive System", "Gametogenesis", "Menstrual Cycle", "Fertilisation and Implantation", "Pregnancy and Embryonic Development", "Parturition and Lactation"] },
+      { name: "Reproductive Health", subtopics: ["Reproductive Health — Problems and Strategies", "Population Explosion and Birth Control", "Medical Termination of Pregnancy (MTP)", "Sexually Transmitted Diseases (STDs)", "Infertility"] },
+      { name: "Principles of Inheritance and Variation", subtopics: ["Mendel’s Laws of Inheritance", "Inheritance of One Gene", "Inheritance of Two Genes", "Sex Determination", "Mutation", "Genetic Disorders"] },
+      { name: "Molecular Basis of Inheritance", subtopics: ["The DNA", "The Search for Genetic Material", "RNA World", "Replication", "Transcription", "Genetic Code", "Translation", "Regulation of Gene Expression", "Human Genome Project", "DNA Fingerprinting"] },
+      { name: "Evolution", subtopics: ["Origin of Life", "Evolution of Life Forms — A Theory", "What are the Evidences for Evolution?", "What is Adaptive Radiation?", "Biological Evolution", "Mechanism of Evolution", "Hardy-Weinberg Principle", "A Brief Account of Evolution", "Origin and Evolution of Man"] },
+      { name: "Human Health and Disease", subtopics: ["Common Diseases in Humans", "Immunity", "AIDS", "Cancer", "Drugs and Alcohol Abuse"] },
+      { name: "Strategies for Enhancement in Food Production", subtopics: ["Animal Husbandry", "Plant Breeding", "Single Cell Protein (SCP)", "Tissue Culture"] },
+      { name: "Microbes in Human Welfare", subtopics: ["Microbes in Household Products", "Microbes in Industrial Products", "Microbes in Sewage Treatment", "Microbes in Production of Biogas", "Microbes as Biocontrol Agents", "Microbes as Biofertilisers"] },
+      { name: "Biotechnology: Principles and Processes", subtopics: ["Principles of Biotechnology", "Tools of Recombinant DNA Technology", "Processes of Recombinant DNA Technology"] },
+      { name: "Biotechnology and its Applications", subtopics: ["Biotechnological Applications in Agriculture", "Biotechnological Applications in Medicine", "Transgenic Animals", "Ethical Issues"] },
+      { name: "Organisms and Populations", subtopics: ["Organism and Its Environment", "Populations"] },
+      { name: "Ecosystem", subtopics: ["Ecosystem—Structure and Function", "Productivity", "Decomposition", "Energy Flow", "Ecological Pyramids", "Ecological Succession", "Nutrient Cycling", "Ecosystem Services"] },
+      { name: "Biodiversity and Conservation", subtopics: ["Biodiversity", "Biodiversity Conservation"] },
+      { name: "Environmental Issues", subtopics: ["Air Pollution and Its Control", "Water Pollution and Its Control", "Solid Wastes", "Agro-chemicals and their Effects", "Radioactive Wastes", "Greenhouse Effect and Global Warming", "Depletion of Ozone Layer in the Stratosphere", "Degradation by Improper Resource Utilisation and Maintenance", "Deforestation"] }
+    ],
+    "Accountancy": [
+      { name: "Accounting for Partnership: Basic Concepts", subtopics: ["Nature of Partnership", "Partnership Deed", "Maintenance of Capital Accounts of Partners", "Profit and Loss Appropriation Account"] },
+      { name: "Reconstitution of a Partnership Firm: Admission of a Partner", subtopics: ["New Profit Sharing Ratio", "Sacrificing Ratio", "Goodwill", "Revaluation of Assets and Liabilities"] }
+    ],
+    "Business Studies": [
+      { name: "Nature and Significance of Management", subtopics: ["Management: Concept, Objectives and Importance", "Nature of Management", "Levels of Management", "Management Functions", "Coordination"] },
+      { name: "Principles of Management", subtopics: ["Fayol's Principles of Management", "Taylor's Scientific Management"] }
+    ],
+    "Economics": [
+      { name: "Introduction to Microeconomics", subtopics: ["Simple Economy", "Central Problems of an Economy", "Organisation of Economic Activities", "Positive and Normative Economics"] },
+      { name: "Theory of Consumer Behaviour", subtopics: ["Utility", "Budget Set and Budget Line", "Optimal Choice of the Consumer", "Demand"] }
+    ]
+  }
 };
 
 declare global {
@@ -88,11 +204,18 @@ export default function App() {
   const [selectedStream, setSelectedStream] = useState(STREAMS[0]);
   const [selectedSubject, setSelectedSubject] = useState(SUBJECTS[0]);
   const [selectedChapter, setSelectedChapter] = useState("");
+  const [selectedSubtopic, setSelectedSubtopic] = useState("");
 
   // Reset chapter when subject changes
   useEffect(() => {
     setSelectedChapter("");
-  }, [selectedSubject]);
+    setSelectedSubtopic("");
+  }, [selectedSubject, selectedClass]);
+
+  // Reset subtopic when chapter changes
+  useEffect(() => {
+    setSelectedSubtopic("");
+  }, [selectedChapter]);
 
   const [selectedQuestionTypes, setSelectedQuestionTypes] = useState<QuestionType[]>([
     QuestionType.MCQ, 
@@ -142,6 +265,7 @@ export default function App() {
       q.class === selectedClass && 
       q.subject === selectedSubject &&
       (selectedChapter === "" || q.chapter === selectedChapter) &&
+      (selectedSubtopic === "" || q.text.toLowerCase().includes(selectedSubtopic.toLowerCase())) &&
       (selectedQuestionTypes.length === 0 || selectedQuestionTypes.includes(q.type))
     );
     return filtered;
@@ -188,6 +312,7 @@ export default function App() {
     const prompt = `Generate a large pool of questions for a Karnataka PU Board ${selectedClass} ${selectedSubject} exam.
     Stream: ${selectedStream}
     Chapter/Topic: ${selectedChapter || "Full Syllabus"}
+    Sub-topic: ${selectedSubtopic || "All sub-topics"}
     Allowed Question Types: ${selectedQuestionTypes.join(", ")}
     
     The output must be a JSON array of objects matching this schema:
@@ -217,6 +342,9 @@ export default function App() {
     CRITICAL: Only generate questions of the following types: ${selectedQuestionTypes.join(", ")}.
     If "Descriptive" is not selected, do not generate Part B, C, or D questions.
     If objective types are not selected, do not generate Part A questions.
+    
+    CRITICAL: If a sub-topic is specified (${selectedSubtopic}), ensure the questions are focused on that specific area.
+    The sub-topic is: ${selectedSubtopic}. All questions must be strictly related to this sub-topic.
 
     Ensure Science/Math questions use LaTeX for formulas (e.g., \\( E = mc^2 \\)).
     CRITICAL: For ALL mathematical content, formulas, variables (like V, x, y, λ), or scientific notation, you MUST use LaTeX delimiters: \\( ... \\) for inline and \\[ ... \\] for block math.
@@ -585,18 +713,40 @@ export default function App() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Chapter / Topic</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Chapter</label>
                   <select 
                     value={selectedChapter}
                     onChange={(e) => setSelectedChapter(e.target.value)}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                   >
                     <option value="">All Chapters (Full Syllabus)</option>
-                    {CHAPTER_MAPPING[selectedSubject]?.map(chapter => (
-                      <option key={chapter} value={chapter}>{chapter}</option>
+                    {CHAPTER_MAPPING[selectedClass]?.[selectedSubject]?.map(chapter => (
+                      <option key={chapter.name} value={chapter.name}>{chapter.name}</option>
                     ))}
                   </select>
                 </div>
+
+                {selectedChapter && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="space-y-2"
+                  >
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sub-topic (Optional)</label>
+                    <select 
+                      value={selectedSubtopic}
+                      onChange={(e) => setSelectedSubtopic(e.target.value)}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    >
+                      <option value="">All Sub-topics</option>
+                      {CHAPTER_MAPPING[selectedClass]?.[selectedSubject]
+                        ?.find(c => c.name === selectedChapter)
+                        ?.subtopics.map(sub => (
+                          <option key={sub} value={sub}>{sub}</option>
+                        ))}
+                    </select>
+                  </motion.div>
+                )}
 
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Question Types</label>
@@ -815,8 +965,24 @@ export default function App() {
                         <p className="text-xs text-slate-500">Select questions to include in your paper</p>
                       </div>
                     </div>
-                    <div className="text-sm font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
-                      {selectedQuestionIds.size} Selected
+                    <div className="flex items-center gap-3">
+                      <div className="text-right hidden sm:block">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Selected</p>
+                        <p className="text-sm font-bold text-indigo-600">{selectedQuestionIds.size} Questions</p>
+                      </div>
+                      <button
+                        onClick={finalizePaper}
+                        disabled={selectedQuestionIds.size === 0}
+                        className={cn(
+                          "px-6 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 shadow-lg",
+                          selectedQuestionIds.size > 0
+                            ? "bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200"
+                            : "bg-slate-100 text-slate-400 cursor-not-allowed"
+                        )}
+                      >
+                        <span>Generate Paper</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
 
